@@ -1,0 +1,19 @@
+FROM gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.12.0-alpine
+
+ARG CLOUD_SQL_CREDENTIALS_BASE64
+ARG INSTANCE_CONNECTION_NAME
+ARG PORT=5432
+
+ENV CLOUD_SQL_CREDENTIALS_BASE64=$CLOUD_SQL_CREDENTIALS_BASE64
+ENV INSTANCE_CONNECTION_NAME=$INSTANCE_CONNECTION_NAME
+ENV PORT=${PORT:-5432} 
+
+USER root
+
+COPY entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+USER nonroot
+
+ENTRYPOINT ["/entrypoint.sh"]
